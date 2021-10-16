@@ -16,8 +16,19 @@ router = routing.Router()
 routes = web.RouteTableDef()
 
 @routes.get('/')
-async def hello(request):
-    return web.Response(text="Hello, world")
+async def index(request):
+    return web.FileResponse('./AnonSuggestionBot/static/index.html')
+
+
+@routes.post('/login')
+async def login(request):
+    data = await request.post()
+    repo = data['repository']
+    message = data['suggestion']
+    #print(repo + ' ' + message)
+
+    #return web.FileResponse('./AnonSuggestionBot/static/index.html')
+    return web.Response(text=f'{repo} and {message}')
 
 if __name__ == "__main__":
     app = web.Application()
