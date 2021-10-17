@@ -3,6 +3,7 @@ import aiohttp
 
 from aiohttp import web
 from gidgethub import routing, sansio
+from gidgethub import aiohttp as gh_aiohttp
 from pymongo import MongoClient
 from pprint import pprint
 
@@ -15,9 +16,13 @@ router = routing.Router()
 
 routes = web.RouteTableDef()
 
+# Site Navigation
 @routes.get('/')
 async def index(request):
-    #return web.Response()
+
+
+        # maybe i need nothing here..?
+
     return web.FileResponse('./AnonSuggestionBot/static/index.html')
 
 @routes.get('/index.html')
@@ -40,14 +45,22 @@ async def anonymous(request):
     #return web.Response()
     return web.FileResponse('./AnonSuggestionBot/static/html/anonymous.html')
 
-
+# Server Processes
 @routes.post('/login')
 async def login(request):
     data = await request.post()
     repo = data['repository']
     message = data['suggestion']
-    #print(repo + ' ' + message)
+    
+    oauth_token = os.environ.get("GH_AUTH")
 
+    async with aiohttp.ClientSession() as session:
+        gh = gh_aiohttp.GitHubAPI(session, "alexogilbee",
+                                  oauth_token=oauth_token)
+
+    url = "https://api.github.com/repos/alexogilbee/githubbottest/discussions/7/comments"
+
+    await gh.post(url, data={'body': message})
     #return web.FileResponse('./AnonSuggestionBot/static/index.html')
     return web.Response(text=f'{repo} and {message}')
 
