@@ -17,7 +17,28 @@ routes = web.RouteTableDef()
 
 @routes.get('/')
 async def index(request):
+    #return web.Response()
     return web.FileResponse('./AnonSuggestionBot/static/index.html')
+
+@routes.get('/index.html')
+async def index(request):
+    #return web.Response()
+    return web.FileResponse('./AnonSuggestionBot/static/index.html')
+
+@routes.get('/html/commit.html')
+async def commit(request):
+    #return web.Response()
+    return web.FileResponse('./AnonSuggestionBot/static/html/commit.html')
+
+@routes.get('/html/gamification.html')
+async def gamification(request):
+    #return web.Response()
+    return web.FileResponse('./AnonSuggestionBot/static/html/gamification.html')
+
+@routes.get('/html/anonymous.html')
+async def anonymous(request):
+    #return web.Response()
+    return web.FileResponse('./AnonSuggestionBot/static/html/anonymous.html')
 
 
 @routes.post('/login')
