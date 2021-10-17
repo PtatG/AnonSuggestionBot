@@ -1,5 +1,6 @@
 import os
 import aiohttp
+import asyncio
 
 from aiohttp import web
 from gidgethub import routing, sansio
@@ -57,6 +58,8 @@ async def login(request):
     async with aiohttp.ClientSession() as session:
         gh = gh_aiohttp.GitHubAPI(session, "alexogilbee",
                                   oauth_token=oauth_token)
+    
+        await asyncio.sleep(5)
 
     url = "https://api.github.com/repos/alexogilbee/githubbottest/discussions/7/comments"
 
