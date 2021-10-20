@@ -1,15 +1,29 @@
 import os
-import requests
-import json
 import aiohttp
+import asyncio
 
 from aiohttp import web
+from gidgethub import routing, sansio
+from gidgethub import aiohttp as gh_aiohttp
+from pymongo import MongoClient
+from pprint import pprint
+
+#url = os.environ.get("MDB_URL")
+
+#client = MongoClient(url)
+#db = client.issueBot
+
+router = routing.Router()
 
 routes = web.RouteTableDef()
 
 # Site Navigation
 @routes.get('/')
 async def index(request):
+
+
+        # maybe i need nothing here..?
+
     return web.FileResponse('./AnonSuggestionBot/static/index.html')
 
 @routes.get('/index.html')
@@ -38,24 +52,20 @@ async def login(request):
     data = await request.post()
     repo = data['repository']
     message = data['suggestion']
-    labels=None
     
-    url = 'https://api.github.com/repos/alexogilbee/hello-world/issues'
+    oauth_token = os.environ.get("GH_AUTH")
 
-    issue = {'title': repo,
-             'body': message,
-             'labels': [] }
+    async with aiohttp.ClientSession() as session:
+        gh = gh_aiohttp.GitHubAPI(session, "alexogilbee",
+                                  oauth_token=oauth_token)
+    
+        await asyncio.sleep(5)
 
-    token = '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'
-    headers = {'Authorization': f'token {token}'}
-    r = requests.post(url, headers=headers, data=json.dumps(issue))
-    if r.status_code == 201:
-        print('successfully did the thing')
-    else:
-        print('couldnt do it')
-        print('response: ' + str(r.content))
+    url = "https://api.github.com/repos/alexogilbee/githubbottest/discussions/7/comments"
 
-    return web.FileResponse('./AnonSuggestionBot/static/index.html')
+    await gh.post(url, data={'body': message})
+    #return web.FileResponse('./AnonSuggestionBot/static/index.html')
+    return web.Response(text=f'{repo} and {message}')
 
 if __name__ == "__main__":
     app = web.Application()
