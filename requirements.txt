@@ -2,4 +2,3 @@ aiohttp
 gidgethub
 pymongo[srv]
 discord
-requests
