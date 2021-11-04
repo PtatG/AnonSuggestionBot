@@ -43,22 +43,9 @@ async def login(request):
     data = await request.post()
     repo = data['repository']
     message = data['suggestion']
-    labels=None
     
-    url = 'https://api.github.com/repos/alexogilbee/hello-world/issues'
+    Webhook.send(message)
 
-    issue = {'title': repo,
-             'body': message,
-             'labels': [] }
-
-    token = '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'
-    headers = {'Authorization': f'token {token}'}
-    r = requests.post(url, headers=headers, data=json.dumps(issue))
-    if r.status_code == 201:
-        print('successfully did the thing')
-    else:
-        print('couldnt do it')
-        print('response: ' + str(r.content))
 
     return web.FileResponse('./AnonSuggestionBot/static/index.html')
 
@@ -70,9 +57,6 @@ if __name__ == "__main__":
         port = int(port)
 
     web.run_app(app, port=port)
-
-    Webhook.send("Eat my buns")
-
 
 # TODO with this bot:
 '''
