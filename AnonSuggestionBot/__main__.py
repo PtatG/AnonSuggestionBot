@@ -7,6 +7,9 @@ from aiohttp import web
 import discord
 from discord import Webhook, RequestsWebhookAdapter, File
 
+WEBHOOK_ID = "905870985398464542"
+WEBHOOK_TOKEN = "69mzXKks7zOGbsL19nHK7ZnQc1NBoiJZJEcTs1HZkIZbQ0QjXDs6g4Q-z8z6vAyVVTim"
+
 routes = web.RouteTableDef()
 Webhook = Webhook.partial(WEBHOOK_ID, WEBHOOK_TOKEN,\
     adapter=RequestsWebhookAdapter())
