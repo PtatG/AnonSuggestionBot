@@ -1,11 +1,16 @@
 import os
 import requests
 import json
-import aiohttp
 
+import aiohttp
 from aiohttp import web
 
+import discord
+from discord import Webhook, RequestsWebhookAdapter, File
+
 routes = web.RouteTableDef()
+Webhook = Webhook.partial(WEBHOOK_ID, WEBHOOK_TOKEN,\
+    adapter=RequestsWebhookAdapter())
 
 # Site Navigation
 @routes.get('/')
@@ -65,3 +70,13 @@ if __name__ == "__main__":
         port = int(port)
 
     web.run_app(app, port=port)
+
+    Webhook.send("Eat my buns")
+
+
+# TODO with this bot:
+'''
+ - read in repo name and suggestion
+ - find discord webhook associated with repo name
+ - send suggestion via webhook
+'''
